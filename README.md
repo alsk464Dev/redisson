@@ -54,3 +54,17 @@ public void vote(Long voteId) {
 #### ③ 검증2: JMeter 부하 테스트 (normal)
 * Thread Group 설정: (Users: 100, Ramp-up: 0, Loop: 1) → HTTP Request (POST)
 * 결과: 100개의 요청 모두 성공, DB 조회 시 `voteCount = 89`
+
+---
+
+## 📌 2단계: Java synchronized 키워드 추가
+### 1. Java `synchronized` 적용 결과
+* **해결 방식**: 메서드에 `synchronized` 키워드를 추가하여 단 하나의 스레드만 순차적으로 접근하도록 제어.
+* **의문점**: @Transactional 과 동시에 존재할 경우 정상적으로 동시성 제어가 될까?
+* **검증 결과**:
+  * 자바 테스트 코드 및 JMeter 부하 테스트 결과 모두 데이터 정합성 깨짐.
+  * Service: `VoteServiceSync`
+  * Test: `VoteServiceSyncTest`
+* **원인 분석**: 
+  * @Transactional 종료가 synchronized 종료보다 늦게 일어나므로 동시성 제어 실패.
+  * 즉, DB에 커밋되기 전 다음 스레드로 넘어가기 때문에 동시성 제어 실패.
