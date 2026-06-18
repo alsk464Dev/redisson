@@ -1,6 +1,7 @@
 package com.example.redisson.controller;
 
 import com.example.redisson.service.VoteService;
+import com.example.redisson.service.VoteServiceSync;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class VoteController {
 
     private final VoteService voteService;
+    private final VoteServiceSync voteServiceSync;
 
     @PostMapping("/{voteId}")
     public ResponseEntity<Void> vote(@PathVariable Long voteId) {
         voteService.vote(voteId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/sync/{voteId}")
+    public ResponseEntity<Void> voteSync(@PathVariable Long voteId) {
+        voteServiceSync.vote(voteId);
         return ResponseEntity.ok().build();
     }
 }
