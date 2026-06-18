@@ -37,7 +37,7 @@ class VoteServiceTest {
 
         // 100개의 스레드를 가진 스레드 풀 생성
         int threadCount = 100;
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+         ExecutorService executorService = Executors.newFixedThreadPool(32);
 
         // 100개의 작업이 모두 끝날 때까지 대기하기 위한 Latch
         CountDownLatch latch = new CountDownLatch(threadCount);
